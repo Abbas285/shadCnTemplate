@@ -14,10 +14,10 @@ import { toast } from "react-toastify";
 import ViewUserDialog from "./ViewUserDialog";
 import EditUserDialog from "./EditUserDialog";
 import AddNewUserDialog from "./AddNewUserDialog";
+import db from "../../../db/db.json";
 import { api } from "../api";
-
 const UserList = () => {
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState <any>([]);
   const [selectedUserData, setSelectedUserData] = useState<any>(null);
   const [openViewDialog, setOpenViewDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -32,12 +32,12 @@ const UserList = () => {
       })
       .catch((error) => {
         console.log(error);
+        setUserData(db);
       });
   };
   useEffect(() => {
     getUserData();
   }, []);
-
   const deleteUser = (selectedUser: any) => {
     api
       .delete(`users/${selectedUser.id}`)
