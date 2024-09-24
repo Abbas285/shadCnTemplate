@@ -66,7 +66,7 @@ const UserList = () => {
         <TableBody>
           {userData &&
             userData.length > 0 &&
-            userData.map((userItem: any, index) => {
+            userData.map((userItem: any, index:any) => {
               return (
                 <TableRow key={index}>
                   <TableCell className="font-medium">{userItem?.id}</TableCell>
