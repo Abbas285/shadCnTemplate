@@ -27,6 +27,7 @@ const UserList = () => {
     api
       .get("users")
       .then((res) => {
+
         setUserData(res.data.db);
       })
       .catch((error) => {
@@ -38,11 +39,8 @@ const UserList = () => {
   }, []);
 
   const deleteUser = (selectedUser: any) => {
-    const apibody :any={
-      id:selectedUser.id
-    }
     api
-      .delete(`users`,apibody)
+      .delete(`users/${selectedUser.id}`)
       .then(() => {
         toast.success("success");
         getUserData();
