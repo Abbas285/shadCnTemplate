@@ -10,12 +10,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import ViewUserDialog from "./ViewUserDialog";
 import EditUserDialog from "./EditUserDialog";
 import AddNewUserDialog from "./AddNewUserDialog";
 import { api } from "../api";
-
 
 const UserList = () => {
   const [userData, setUserData] = useState([]);
@@ -23,12 +22,11 @@ const UserList = () => {
   const [openViewDialog, setOpenViewDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openNewUserDialog, setOpenNewUserDialog] = useState(false);
-  
+
   const getUserData = () => {
     api
       .get("users")
       .then((res) => {
-        console.log(res.data.db);
         setUserData(res.data.db);
       })
       .catch((error) => {
@@ -40,8 +38,11 @@ const UserList = () => {
   }, []);
 
   const deleteUser = (selectedUser: any) => {
+    const apibody :any={
+      id:selectedUser.id
+    }
     api
-      .delete(`users/${selectedUser.id}`)
+      .delete(`users`,apibody)
       .then(() => {
         toast.success("success");
         getUserData();
@@ -52,10 +53,9 @@ const UserList = () => {
       });
   };
   return (
-    
-   <div className="w-full"> 
-   <Table>
-        <TableCaption>A list of Users  </TableCaption>
+    <div className="w-full">
+      <Table>
+        <TableCaption>A list of Users </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="">ID</TableHead>
@@ -84,11 +84,15 @@ const UserList = () => {
                     >
                       View
                     </Button>
-                    <Button variant="secondary"
-                    onClick={() => {
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
                         setSelectedUserData(userItem);
                         setOpenEditDialog(true);
-                      }}>Edit</Button>
+                      }}
+                    >
+                      Edit
+                    </Button>
                     <Button
                       variant="destructive"
                       onClick={() => {
@@ -104,14 +108,14 @@ const UserList = () => {
         </TableBody>
       </Table>
       <div className="w-full py-5 text-right">
-      <Button
-               onClick={() => {
-                setSelectedUserData(null);
-                setOpenNewUserDialog(true);
-              }}
-                    >
-                      Add New User
-                    </Button>
+        <Button
+          onClick={() => {
+            setSelectedUserData(null);
+            setOpenNewUserDialog(true);
+          }}
+        >
+          Add New User
+        </Button>
       </div>
       {openViewDialog && (
         <ViewUserDialog
@@ -120,14 +124,14 @@ const UserList = () => {
           setOpenViewDialog={setOpenViewDialog}
         />
       )}
-      {openEditDialog&&
-            <EditUserDialog
-            selectedUserData={selectedUserData}
-            openViewDialog={openEditDialog}
-            setOpenViewDialog={setOpenEditDialog}
-            getUserData={getUserData}
-          />
-      }
+      {openEditDialog && (
+        <EditUserDialog
+          selectedUserData={selectedUserData}
+          openViewDialog={openEditDialog}
+          setOpenViewDialog={setOpenEditDialog}
+          getUserData={getUserData}
+        />
+      )}
       {openNewUserDialog && (
         <AddNewUserDialog
           // selectedUserData={selectedUserData}
@@ -136,9 +140,7 @@ const UserList = () => {
           getUserData={getUserData}
         />
       )}
-   </div>
-
-    
+    </div>
   );
 };
 

@@ -64,7 +64,6 @@ const EditUserDialog = ({
 
   };
   const { name, userName, email } = userForm;
-
   return (
     <Dialog open={openViewDialog} onOpenChange={setOpenViewDialog}>
       <DialogContent className="sm:max-w-[425px] bg-slate-100 text-black">
