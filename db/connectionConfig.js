@@ -1,11 +1,11 @@
 
 import { MongoClient } from "mongodb";
-import cors from "cors"
-const cors = require('cors');
+// import cors from "cors"
+// const cors = require('cors');
 
-app.use(cors({
-  origin: 'https://your-frontend-url.vercel.app', // Allow only your frontend
-}));
+// app.use(cors({
+//   origin: 'https://your-frontend-url.vercel.app', // Allow only your frontend
+// }));
 
 const uri = process.env.MONGODB_URI;
 const options = {};

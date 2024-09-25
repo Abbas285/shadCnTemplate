@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import db from "../../../db/db.json";
 import user from "@/db/Models/Users";
 import connectDB from "@/db/connectionConfig";
-
+import cors from "cors"
 // ============== Get User  ================
-export async function GET() {
+export async function GET(request) {
+  request.setHeader('Access-Control-Allow-Origin', 'https://your-frontend-url.vercel.app'); // Replace with your frontend URL
+  request.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  request.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   const client = await connectDB;
   const db = client.db("testproject");
   const users = await db.collection("users").find({}).toArray();
+
   if (users) {
     return NextResponse.json({
       status: 200,
