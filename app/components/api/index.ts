@@ -5,7 +5,7 @@ const api=axios.create({
        'Content-Type': 'application/json'
       },
     maxBodyLength: Infinity,
-    baseURL: 'http://localhost:3000/api/'
+    baseURL: 'https://shad-cn-template.vercel.app/api/'
  });
 
   
