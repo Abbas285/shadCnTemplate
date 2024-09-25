@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import user from "@/db/Models/Users";
 import connectDB from "@/db/connectionConfig";
-import cors from "cors"
+// import cors from "cors"
 // ============== Get User  ================
 export async function GET() {
 

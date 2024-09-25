@@ -39,102 +39,104 @@ const UserList = () => {
   }, []);
 
   const deleteUser = (selectedUser: any) => {
-    let data :any= JSON.stringify({
-      "id": selectedUser.id
+    let data: any = JSON.stringify({
+      id: selectedUser.id,
     });
     let config = {
-      method: 'delete',
+      method: "delete",
       maxBodyLength: Infinity,
-      url: 'http://localhost:3000/api/users',
-      headers: { 
-        'Content-Type': 'application/json'
+      url: process.env.HOST_ADDRESS,
+      headers: {
+        "Content-Type": "application/json",
       },
-      data : data
+      data: data,
     };
-    axios.request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-      getUserData();
-      toast.success("success");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        getUserData();
+        toast.success("success");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div className="w-full ">
-{userData&&userData.length>0?
-     <>
-   
-     <Table className="w-full overflow-hidden">
-          <TableCaption>A list of Users </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="">ID</TableHead>
-              <TableHead className="">Name</TableHead>
-              <TableHead>User Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead className="text-right">Operation</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {userData &&
-              userData.length > 0 &&
-              userData.map((userItem: any, index: any) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">{userItem?.id}</TableCell>
-                    <TableCell>{userItem.name}</TableCell>
-                    <TableCell>{userItem.username}</TableCell>
-                    <TableCell>{userItem.email}</TableCell>
-                    <TableCell className="flex gap-3 justify-end">
-                      <Button
-                        onClick={() => {
-                          setSelectedUserData(userItem);
-                          setOpenViewDialog(true);
-                        }}
-                      >
-                        View
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        onClick={() => {
-                          setSelectedUserData(userItem);
-                          setOpenEditDialog(true);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={() => {
-                          deleteUser(userItem);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-        <div className="w-full py-5 text-right px-5">
-          <Button
-            onClick={() => {
-              setSelectedUserData(null);
-              setOpenNewUserDialog(true);
-            }}
-          >
-            Add New User
-          </Button>
+      {userData && userData.length > 0 ? (
+        <>
+          <Table className="w-full overflow-hidden">
+            <TableCaption>A list of Users </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="">ID</TableHead>
+                <TableHead className="">Name</TableHead>
+                <TableHead>User Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead className="text-right">Operation</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {userData &&
+                userData.length > 0 &&
+                userData.map((userItem: any, index: any) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">
+                        {userItem?.id}
+                      </TableCell>
+                      <TableCell>{userItem.name}</TableCell>
+                      <TableCell>{userItem.username}</TableCell>
+                      <TableCell>{userItem.email}</TableCell>
+                      <TableCell className="flex gap-3 justify-end">
+                        <Button
+                          onClick={() => {
+                            setSelectedUserData(userItem);
+                            setOpenViewDialog(true);
+                          }}
+                        >
+                          View
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            setSelectedUserData(userItem);
+                            setOpenEditDialog(true);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() => {
+                            deleteUser(userItem);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+          <div className="w-full py-5 text-right px-5">
+            <Button
+              onClick={() => {
+                setSelectedUserData(null);
+                setOpenNewUserDialog(true);
+              }}
+            >
+              Add New User
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div className="w-screen h-[60vh] flex justify-center items-center">
+          <Loader />
         </div>
-     
-     </>:<div className="w-screen h-[60vh] flex justify-center items-center">
-     <Loader/>
-      </div>
-}
+      )}
       {openViewDialog && (
         <ViewUserDialog
           selectedUserData={selectedUserData}
@@ -152,7 +154,7 @@ const UserList = () => {
       )}
       {openNewUserDialog && (
         <AddNewUserDialog
-        userData={userData}
+          userData={userData}
           openViewDialog={openNewUserDialog}
           setOpenViewDialog={setOpenNewUserDialog}
           getUserData={getUserData}
