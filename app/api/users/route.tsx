@@ -11,7 +11,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const body = await request.json();
   db.push({
-    id: db.length,
+    id: db.length + 1,
     name: body.name,
     username: body.username,
     email: body.email,

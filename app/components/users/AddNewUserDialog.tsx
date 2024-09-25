@@ -25,10 +25,10 @@ const AddNewUserDialog = ({
 }: pageProps) => {
   const [userForm, setUserForm] = useState<any>({
     name: "",
-    userName: "",
+    username: "",
     email: "",
   });
-  const { name, userName, email } = userForm;
+  const { name, username, email } = userForm;
   const onchangeHandler = (event: any) => {
     const { name, value } = event.target;
     setUserForm((prevState: any) => ({
@@ -39,7 +39,7 @@ const AddNewUserDialog = ({
   const submitForm = () => {
     const apiBody = {
       name,
-      userName,
+      username,
       email,
     };
     api
@@ -84,13 +84,13 @@ const AddNewUserDialog = ({
             <Input
               id="username"
               name="username"
-              defaultValue={userName}
+              defaultValue={username}
               onChange={onchangeHandler}
               className="col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
+            <Label htmlFor="email" className="text-right">
               Email
             </Label>
             <Input

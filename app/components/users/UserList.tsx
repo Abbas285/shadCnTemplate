@@ -17,7 +17,7 @@ import AddNewUserDialog from "./AddNewUserDialog";
 import db from "../../../db/db.json";
 import { api } from "../api";
 const UserList = () => {
-  const [userData, setUserData] = useState <any>([]);
+  const [userData, setUserData] = useState<any>([]);
   const [selectedUserData, setSelectedUserData] = useState<any>(null);
   const [openViewDialog, setOpenViewDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -51,8 +51,8 @@ const UserList = () => {
       });
   };
   return (
-    <div className="w-full">
-      <Table>
+    <div className="w-full ">
+      <Table className="w-full overflow-hidden">
         <TableCaption>A list of Users </TableCaption>
         <TableHeader>
           <TableRow>
@@ -66,7 +66,7 @@ const UserList = () => {
         <TableBody>
           {userData &&
             userData.length > 0 &&
-            userData.map((userItem: any, index:any) => {
+            userData.map((userItem: any, index: any) => {
               return (
                 <TableRow key={index}>
                   <TableCell className="font-medium">{userItem?.id}</TableCell>
@@ -105,7 +105,7 @@ const UserList = () => {
             })}
         </TableBody>
       </Table>
-      <div className="w-full py-5 text-right">
+      <div className="w-full py-5 text-right px-5">
         <Button
           onClick={() => {
             setSelectedUserData(null);
