@@ -19,18 +19,22 @@ import axios from "axios";
 import { api } from "../api";
 const UserList = () => {
   const [userData, setUserData] = useState<any>([]);
+  const [openLoader,setOpenLoader]=useState(true)
   const [selectedUserData, setSelectedUserData] = useState<any>(null);
   const [openViewDialog, setOpenViewDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openNewUserDialog, setOpenNewUserDialog] = useState(false);
 
   const getUserData = () => {
+
     api
       .get("users")
       .then((res) => {
         setUserData(res.data.res);
+        setOpenLoader(false)
       })
       .catch((error) => {
+        setOpenLoader(false)
         console.log(error);
       });
   };
@@ -134,7 +138,24 @@ const UserList = () => {
         </>
       ) : (
         <div className="w-screen h-[60vh] flex justify-center items-center">
-          <Loader />
+        {
+          openLoader? <Loader />:<>
+          <div>
+          <p> User list is empty. ...!</p>
+          <div className="w-full py-5 text-right px-5">
+            <Button
+              onClick={() => {
+                setSelectedUserData(null);
+                setOpenNewUserDialog(true);
+              }}
+            >
+              Add New User
+            </Button>
+          </div>
+          </div>
+          </>
+          
+        } 
         </div>
       )}
       {openViewDialog && (
