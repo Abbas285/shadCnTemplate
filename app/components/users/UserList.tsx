@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import ViewUserDialog from "./ViewUserDialog";
 import EditUserDialog from "./EditUserDialog";
 import AddNewUserDialog from "./AddNewUserDialog";
+import axios from "axios";
 import db from "../../../db/db.json";
 import { api } from "../api";
 const UserList = () => {
@@ -27,28 +28,39 @@ const UserList = () => {
     api
       .get("users")
       .then((res) => {
-
-        setUserData(res.data.db);
+        setUserData(res.data.res);
       })
       .catch((error) => {
         console.log(error);
-        setUserData(db);
       });
   };
   useEffect(() => {
     getUserData();
   }, []);
+
   const deleteUser = (selectedUser: any) => {
-    api
-      .delete(`users/${selectedUser.id}`)
-      .then(() => {
-        toast.success("success");
-        getUserData();
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("something went wrong");
-      });
+    let data :any= JSON.stringify({
+      "id": selectedUser.id
+    });
+    let config = {
+      method: 'delete',
+      maxBodyLength: Infinity,
+      url: 'http://localhost:3000/api/users',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+      getUserData();
+      toast.success("success");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   };
   return (
     <div className="w-full ">
@@ -132,7 +144,7 @@ const UserList = () => {
       )}
       {openNewUserDialog && (
         <AddNewUserDialog
-          // selectedUserData={selectedUserData}
+        userData={userData}
           openViewDialog={openNewUserDialog}
           setOpenViewDialog={setOpenNewUserDialog}
           getUserData={getUserData}

@@ -14,11 +14,13 @@ import { toast } from 'react-toastify';
 import { api } from "../api";
 
 interface pageProps {
+  userData:any,
   openViewDialog: boolean;
   setOpenViewDialog: any;
   getUserData: any;
 }
 const AddNewUserDialog = ({
+  userData,
   openViewDialog,
   setOpenViewDialog,
   getUserData,
@@ -38,6 +40,7 @@ const AddNewUserDialog = ({
   };
   const submitForm = () => {
     const apiBody = {
+      id:userData.length+1,
       name,
       username,
       email,

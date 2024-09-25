@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { memo, useMemo, useState, useEffect } from "react";
 import { api } from "../api";
 
@@ -26,17 +26,21 @@ const EditUserDialog = ({
   getUserData,
 }: pageProps) => {
   const [userForm, setUserForm] = useState<any>({
+    id: "",
     name: "",
-    userName: "",
+    username: "",
     email: "",
   });
+  const { name, username, email, id } = userForm;
   const userData = useMemo(() => selectedUserData, []);
+
   useEffect(() => {
     {
       userData &&
         setUserForm({
+          id: userData?.id,
           name: userData?.name,
-          userName: userData?.username,
+          username: userData?.username,
           email: userData?.email,
         });
     }
@@ -50,10 +54,16 @@ const EditUserDialog = ({
     }));
   };
   const submitForm = () => {
+    const apiBody = {
+      id,
+      name,
+      username,
+      email,
+    };
     api
-      .put(`users/${userData.id}`)
+      .put(`users`, apiBody)
       .then(() => {
-        toast.success("success");
+        toast.success("successfully updated");
         getUserData();
         setOpenViewDialog(false);
       })
@@ -61,9 +71,8 @@ const EditUserDialog = ({
         console.log(error);
         toast.error("something went wrong");
       });
-
   };
-  const { name, userName, email } = userForm;
+
   return (
     <Dialog open={openViewDialog} onOpenChange={setOpenViewDialog}>
       <DialogContent className="sm:max-w-[425px] bg-slate-100 text-black">
@@ -93,7 +102,7 @@ const EditUserDialog = ({
             <Input
               id="username"
               name="username"
-              defaultValue={userName}
+              defaultValue={username}
               onChange={onchangeHandler}
               className="col-span-3"
             />
