@@ -45,7 +45,7 @@ const UserList = () => {
     let config = {
       method: "delete",
       maxBodyLength: Infinity,
-      url: process.env.HOST_ADDRESS,
+      url: 'https://shad-cn-template.vercel.app/api/',
       headers: {
         "Content-Type": "application/json",
       },
