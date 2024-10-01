@@ -10,8 +10,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "react-toastify";
-import { memo, useMemo, useState, useEffect } from "react";
+import { memo, useEffect } from "react";
 import { api } from "../api";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface pageProps {
   selectedUserData: any;
@@ -19,57 +20,49 @@ interface pageProps {
   setOpenViewDialog: any;
   getUserData: any;
 }
+
+type FormValues = {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+};
+
 const EditUserDialog = ({
   selectedUserData,
   openViewDialog,
   setOpenViewDialog,
   getUserData,
 }: pageProps) => {
-  const [userForm, setUserForm] = useState<any>({
-    id: "",
-    name: "",
-    username: "",
-    email: "",
-  });
-  const { name, username, email, id } = userForm;
-  const userData = useMemo(() => selectedUserData, []);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>();
 
   useEffect(() => {
-    {
-      userData &&
-        setUserForm({
-          id: userData?.id,
-          name: userData?.name,
-          username: userData?.username,
-          email: userData?.email,
-        });
+    if (selectedUserData) {
+      setValue("id", selectedUserData?.id);
+      setValue("name", selectedUserData?.name);
+      setValue("username", selectedUserData?.username);
+      setValue("email", selectedUserData?.email);
     }
-  }, [userData]);
+  }, [selectedUserData, setValue]);
 
-  const onchangeHandler = (event: any) => {
-    const { name, value } = event.target;
-    setUserForm((prevState: any) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-  const submitForm = () => {
-    const apiBody = {
-      id,
-      name,
-      username,
-      email,
-    };
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    const apiBody = { ...data };
+
     api
-      .put(`users`, apiBody)
+      .put(`users/${data.id}`, apiBody)
       .then(() => {
-        toast.success("successfully updated");
+        toast.success("Successfully updated");
         getUserData();
         setOpenViewDialog(false);
       })
       .catch((error) => {
         console.log(error);
-        toast.error("something went wrong");
+        toast.error("Something went wrong");
       });
   };
 
@@ -82,49 +75,66 @@ const EditUserDialog = ({
             Make changes to your profile here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Name
+              Name <span className="text-red-600">*</span>
             </Label>
             <Input
               id="name"
-              name="name"
-              defaultValue={name}
-              onChange={onchangeHandler}
+              {...register("name", { required: "Name is required" })}
               className="col-span-3"
             />
+    
           </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="username" className="text-right">
-              User Name
+              User Name <span className="text-red-600">*</span>
             </Label>
             <Input
               id="username"
-              name="username"
-              defaultValue={username}
-              onChange={onchangeHandler}
+              {...register("username", { required: "Username is required" })}
               className="col-span-3"
             />
+  
           </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Email
+            <Label htmlFor="email" className="text-right">
+              Email <span className="text-red-600">*</span>
             </Label>
             <Input
               id="email"
-              name="email"
-              defaultValue={email}
-              onChange={onchangeHandler}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                  message: "Invalid email address",
+                },
+              })}
               className="col-span-3"
             />
+       
           </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit" onClick={submitForm}>
-            Save changes
-          </Button>
-        </DialogFooter>
+          <div className=" w-full text-center">
+            {errors.email && (
+              <p className="text-red-600">{errors.email.message}</p>
+            )}
+            {errors.username && (
+              <p className="text-red-600">{errors.username.message}</p>
+            )}
+            {errors.name && (
+              <p className="text-red-600">{errors.name.message}</p>
+            )}
+          </div>
+          {/* Dialog Footer */}
+          <DialogFooter>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
