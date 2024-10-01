@@ -52,9 +52,8 @@ const EditUserDialog = ({
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const apiBody = { ...data };
-
     api
-      .put(`users/${data.id}`, apiBody)
+      .put(`users`, apiBody)
       .then((res) => {
         if(res.data.status===400){
           toast.error("on this email User Already exist");

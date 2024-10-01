@@ -9,17 +9,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { memo, useMemo } from "react";
 
+
 interface pageProps {
   selectedUserData: any;
   openViewDialog: boolean;
   setOpenViewDialog: any;
 }
+
 const ViewUser = ({
   selectedUserData,
   openViewDialog,
   setOpenViewDialog,
 }: pageProps) => {
+  
   const userData = useMemo(() => selectedUserData, []);
+
   return (
     <Dialog open={openViewDialog} onOpenChange={setOpenViewDialog}>
       <DialogContent className="sm:max-w-[425px] bg-slate-100 text-black">

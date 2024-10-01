@@ -103,6 +103,7 @@ export async function PUT(request) {
       message: "ID, name, and email are required",
     });
   }
+
   try {
     const client = await connectDB;
     const db = client.db("testproject");
@@ -113,6 +114,7 @@ export async function PUT(request) {
         message: "User not found",
       });
     }
+
     await db
       .collection("users")
       .updateOne(
