@@ -49,10 +49,16 @@ const AddNewUserDialog = ({
     console.log("data", data);
     api
       .post(`users`, apiBody)
-      .then(() => {
-        toast.success("User created successfully");
-        getUserData();
-        setOpenViewDialog(false);
+      .then((res) => {
+  
+        if(res.data.status===400){
+          toast.error("on this email User Already exist");
+        }else{
+          toast.success("User created successfully");
+          getUserData();
+          setOpenViewDialog(false);
+        }
+      
       })
       .catch((error) => {
         console.log(error);
